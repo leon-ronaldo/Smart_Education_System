@@ -1,0 +1,209 @@
+{
+    "student" : {
+        "firstName": "string",
+        "lastName": "string",
+        "studentId": "string (reg no)",
+        "age": "integer",
+        "dateOfBirth": "ISO8606 date string",
+        "class": "number",
+        "section": "character",
+        "gender": "string",
+        "phone": "string",
+        "email": "string",
+        "address": "string",
+        "photoUrl": "url",
+        "analyticsData": {
+            "questionsAsked": [
+                {
+                    "topic": "string",
+                    "question": "string",
+                    "questionValue": "string",
+                    "questionCleared": "boolean"
+                }
+            ],
+            "answers": [
+                {
+                    "topic": "string",
+                    "answer": "string",
+                    "answerValue": "string"
+                }
+            ],
+            "attendedQuizzes": [
+                {
+                    "quizTitle": "string",
+                    "score": "double",
+                    "dateAttended": "ISO8606 date string"
+                }
+            ],
+            "questionCount": "integer",
+            "answerCount": "integer",
+            "sessionsAttended": "integer (can be any session, or quiz or tutorial).",
+            "activeLearningTime": "integer (minutes)"
+        },
+        "analyticsResult": {
+            "iq": "integer",
+            "weakConcepts": [
+                {
+                    "topic": "string",
+                    "issue": "string (desciption)",
+                    "suggestion": "string (guidelines)"
+                }
+            ],
+            "strongConcepts": [
+                {
+                    "topic": "string"
+                }
+            ],
+            "questioningAbility": "(low / medium / high)",
+            "remarks": "string (remark on student)",
+            "suggestion": "string (guidelines - overall)"
+        }
+    },
+
+    "staff" : {
+        "staffID": "string",
+        "firstName": "string",
+        "lastName": "string",
+        "age": "integer",
+        "dateOfBirth": "ISO8606 date string",
+        "gender": "string",
+        "phone": "string",
+        "email": "string",
+        "photoUrl": "url",
+        "mentoringClass": "null / class selection",
+        "timetable": {
+            "monday": [
+                {
+                    "hourName": "string",
+                    "class": "number",
+                    "section": "character",
+                    "hourStart": "ISO8606 time string",
+                    "hourEnd": "ISO8606 time string"
+                }
+            ],
+            "tuesday": [
+                {
+                    "hourName": "string",
+                    "class": "number",
+                    "section": "character",
+                    "hourStart": "ISO8606 time string",
+                    "hourEnd": "ISO8606 time string"
+                }
+            ],
+            "wednesday": [
+                {
+                    "hourName": "string",
+                    "class": "number",
+                    "section": "character",
+                    "hourStart": "ISO8606 time string",
+                    "hourEnd": "ISO8606 time string"
+                }
+            ],
+            "thursday": [
+                {
+                    "hourName": "string",
+                    "class": "number",
+                    "section": "character",
+                    "hourStart": "ISO8606 time string",
+                    "hourEnd": "ISO8606 time string"
+                }
+            ],
+            "friday": [
+                {
+                    "hourName": "string",
+                    "class": "number",
+                    "section": "character",
+                    "hourStart": "ISO8606 time string",
+                    "hourEnd": "ISO8606 time string"
+                }
+            ],
+            "saturday": [
+                {
+                    "hourName": "string",
+                    "class": "number",
+                    "section": "character",
+                    "hourStart": "ISO8606 time string",
+                    "hourEnd": "ISO8606 time string"
+                }
+            ]
+        }
+    },
+
+    "classRoom": {
+        "classRoomId": "string",
+        "grade": "number",
+        "section": "character",
+        "mentor": "staffID",
+        "students": [
+            {
+                "studentId": "string (reg no)"
+            }
+        ],
+        "smartBoardID": "string (unique id)",
+        "noiseControllerID": "string (unique id)",
+        "fireSensorID": "string (unique id)",
+        "attendances": [
+            {
+                "date": "ISO8606 date string",
+                "attendance": [
+                    {
+                        "hour": "number",
+                        "students": [
+                            {
+                                "studentID": "string (reg no)",
+                                "present": "boolean"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+
+    "quiz" : {
+        "title": "string",
+        "concept": "string",
+        "quizID": "string",
+        "material": "url (url to a document specified by staff)",
+        "questions": [
+            {
+                "question": "string",
+                "options" : [
+                    "option"
+                ],
+                "marks": "integer"
+            }
+        ]
+    },
+
+    "tutorial" : {
+        "title": "string",
+        "concept": "string",
+        "material":"url (url to a document specified by staff)",
+        "youtubeLinks": [
+            "link"
+        ],
+        "summarizedContent": {
+            "aboutConcept": "string (desciption about what the concept is)",
+            "keyPoints": [
+                "points"
+            ],
+            "summary": "string (detailed, simple, catchy, and feasible content)"
+        }
+    },
+
+    "smartBoardSchedule" : {
+        "scheduleTitle": "string",
+        "smartBoardID": "string (unique id)",
+        "time": "ISO8606 time string",
+        "assignedBy": "staffID",
+        "executed": "boolean"
+    },
+
+    "admin" : {
+        "adminID": "string (unique id)",
+        "password": "password",
+        "institutionName": "string",
+        "acronym": "string"
+    }
+}

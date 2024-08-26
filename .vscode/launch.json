@@ -1,0 +1,68 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "smart_admin_app",
+            "cwd": "smart_admin_app",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "smart_admin_app (profile mode)",
+            "cwd": "smart_admin_app",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "smart_admin_app (release mode)",
+            "cwd": "smart_admin_app",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "smart_staffs_app",
+            "cwd": "smart_staffs_app",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "smart_staffs_app (profile mode)",
+            "cwd": "smart_staffs_app",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "smart_staffs_app (release mode)",
+            "cwd": "smart_staffs_app",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "smart_students_app",
+            "cwd": "smart_students_app",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "smart_students_app (profile mode)",
+            "cwd": "smart_students_app",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "smart_students_app (release mode)",
+            "cwd": "smart_students_app",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        }
+    ]
+}

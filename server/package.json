@@ -1,10 +1,12 @@
 {
   "name": "smart_education_system_server",
   "version": "1.0.0",
-  "description": "server system manages the overall smart education system ",
+  "description": "a mainframe server that monitors and controls the overall education system (apps and the automated systems)",
   "main": "server.js",
   "scripts": {
-    "test": "npm run dev"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "dev": "nodemon server.js"
   },
   "repository": {
     "type": "git",
@@ -15,5 +17,20 @@
   "bugs": {
     "url": "https://github.com/leon-ronaldo/Smart_Education_System/issues"
   },
-  "homepage": "https://github.com/leon-ronaldo/Smart_Education_System#readme"
+  "homepage": "https://github.com/leon-ronaldo/Smart_Education_System#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "buffer": "^6.0.3",
+    "dotenv": "^16.0.3",
+    "express": "^4.19.2",
+    "express-async-handler": "^1.2.0",
+    "express-session": "^1.18.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^6.6.5",
+    "multer": "^1.4.5-lts.1",
+    "python-shell": "^5.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  }
 }

@@ -19,3 +19,15 @@ dev_dependencies:
 flutter: 
   uses-material-design: true
 
+  assets:
+      - assets/images/
+      - assets/icons/
+
+  fonts:
+    - family: poppins
+      fonts:
+        - asset: assets/fonts/Poppins-Light.ttf
+
+    - family: vegan
+      fonts:
+        - asset: assets/fonts/Vegan.ttf
