@@ -1,10 +1,14 @@
+import 'dart:convert';
+
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 
 class HomeController extends GetxController {
-  final data = {
-    'profileUrl':
-        'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Harvard_University_coat_of_arms.svg/640px-Harvard_University_coat_of_arms.svg.png',
-    'institutionName': 'Harvard University',
+  RxBool ready = false.obs;
+
+  RxMap data = {
+    'profileUrl': 'https://snscourseware.org/images/SNS%20Institutionsapp.png',
+    'institutionName': 'SNS College of Technology',
     'notifications': [
       {
         'type': 'Fire Alarm Trigger',
@@ -23,43 +27,12 @@ class HomeController extends GetxController {
         "temperature": 28.5
       }
     ],
-    'classRooms': [
-      {
-        "classRoomId": "3cseb",
-        "class": "III CSE B",
-        "grade": "III",
-        "mentor": "staffID",
-      },
-      {
-        "classRoomId": "3cseb",
-        "class": "II CSE B",
-        "grade": "II",
-        "mentor": "staffID",
-      },
-      {
-        "classRoomId": "3cseb",
-        "class": "IX AIML B",
-        "grade": "IX",
-        "mentor": "staffID",
-      },
-      {
-        "classRoomId": "3cseb",
-        "class": "VII ECE D",
-        "grade": "VII",
-        "mentor": "staffID",
-      },
-      {
-        "classRoomId": "3cseb",
-        "class": "X IT A",
-        "grade": "X",
-        "mentor": "staffID",
-      }
-    ]
-  };
+  }.obs;
 
   @override
   void onInit() {
     super.onInit();
+    getClassRooms();
   }
 
   @override
@@ -70,5 +43,17 @@ class HomeController extends GetxController {
   @override
   void onClose() {
     super.onClose();
+  }
+
+  void getClassRooms() async {
+    final response =
+        await http.get(Uri.parse('http://localhost:5000/admin/SNSCT/'));
+
+    if (response.statusCode == 200) {
+      data.value['classRooms'] = jsonDecode(response.body);
+      ready.value = true;
+    } else {
+      print(response.body);
+    }
   }
 }

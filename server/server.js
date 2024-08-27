@@ -9,6 +9,8 @@ const port = 5000;
 app.use(express.json());
 
 app.use('/classRoom', require('./routes/classRoomRoute'));
+app.use('/students', require('./routes/stuentsRoute'));
+app.use('/admin', require('./routes/adminRoute'));
 app.use(require('./middleware/errorHandler'))
 
 app.listen(port, () => {

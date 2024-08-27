@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:get/get.dart';
@@ -42,15 +43,25 @@ class HomeView extends GetView<HomeController> {
         color: Color(0xfffffdfc),
         padding: EdgeInsets.only(top: MediaQuery.paddingOf(context).top + 10),
         child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              NavBar(
-                profileUrl: controller.data['profileUrl'].toString(),
+          child: Obx(
+            () => Visibility(
+              replacement: SizedBox(
+                  height: screenSize.height,
+                  child: const Center(
+                      child: SpinKitPouringHourGlassRefined(
+                          color: Colors.blueAccent))),
+              visible: controller.ready.value,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  NavBar(
+                    profileUrl: controller.data['profileUrl'].toString(),
+                  ),
+                  HomePageHeroSection(),
+                  HomePageClassRoomsSection()
+                ],
               ),
-              HomePageHeroSection(),
-              HomePageClassRoomsSection()
-            ],
+            ),
           ),
         ),
       ),
@@ -246,96 +257,111 @@ class HomePageClassRoomsSection extends GetWidget<HomeController> {
             ),
           ),
           GridView.builder(
-            physics: const NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               scrollDirection: Axis.vertical,
               itemCount: classRooms.length,
               padding: EdgeInsets.zero,
               shrinkWrap: true,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                childAspectRatio: 0.9,
+                childAspectRatio: 0.75,
                 crossAxisCount: 2,
                 crossAxisSpacing: 10,
                 mainAxisSpacing: 10,
               ),
               itemBuilder: (context, index) {
-                return Container(
-                  height: screenSize.height * 0.1,
-                  decoration: BoxDecoration(
-                      color: gradeColors[classRooms[index]['grade']],
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(20))),
-                  child: Stack(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(15),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Container(),
-                                Container(
-                                  padding: const EdgeInsets.all(8),
-                                  decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.black54),
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(5000))),
-                                  child: const Icon(
-                                    Icons.arrow_outward,
-                                    size: 18,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              width: double.infinity,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                return InkResponse(
+                  onTap: () {
+                    Get.toNamed('/class-room-page', arguments: {
+                      'data': {
+                        'institutionName': 'SNS College of Technology',
+                        'classRoomID': classRooms[index]['classRoomID'],
+                        'classSection': classRooms[index]['section'],
+                        'classGrade': classRooms[index]['grade'],
+                        'profileUrl': controller.data['profileUrl']
+                      }
+                    });
+                  },
+                  child: Container(
+                    height: screenSize.height * 0.1,
+                    decoration: BoxDecoration(
+                        color: gradeColors[classRooms[index]['grade']],
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(20))),
+                    child: Stack(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(15),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
-                                    classRooms[index]['class'],
-                                    style: TextStyle(
-                                        color: Colors.black87,
-                                        fontSize: screenSize.width * 0.05),
-                                  ),
-                                  Text(
-                                    'Mentor : ${classRooms[index]['mentor']}',
-                                    style: TextStyle(
-                                        color: Colors.black54,
-                                        fontSize: screenSize.width * 0.04),
+                                  Container(),
+                                  Container(
+                                    padding: const EdgeInsets.all(8),
+                                    decoration: BoxDecoration(
+                                        border:
+                                            Border.all(color: Colors.black54),
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(5000))),
+                                    child: const Icon(
+                                      Icons.arrow_outward,
+                                      size: 18,
+                                    ),
                                   ),
                                 ],
                               ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Positioned(
-                        top: 20,
-                        left: -screenSize.width * 0.05,
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            SvgPicture.asset(
-                              'assets/icons/badge-icon.svg',
-                              height: screenSize.width * 0.27,
-                            ),
-                            Container(
-                              margin: const EdgeInsets.only(top: 5),
-                              child: Text(
-                                classRooms[index]['grade'],
-                                style: TextStyle(
-                                    fontSize: screenSize.width * 0.1,
-                                    color: Colors.black54,
-                                    fontWeight: FontWeight.bold),
+                              SizedBox(
+                                width: double.infinity,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      classRooms[index]['section'],
+                                      style: TextStyle(
+                                          color: Colors.black87,
+                                          fontSize: screenSize.width * 0.05),
+                                    ),
+                                    Text(
+                                      'Mentor : ${classRooms[index]['mentor']}',
+                                      style: TextStyle(
+                                          color: Colors.black54,
+                                          fontSize: screenSize.width * 0.04),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      )
-                    ],
+                        Positioned(
+                          top: 20,
+                          left: -screenSize.width * 0.05,
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              SvgPicture.asset(
+                                'assets/icons/badge-icon.svg',
+                                height: screenSize.width * 0.27,
+                              ),
+                              Container(
+                                margin: const EdgeInsets.only(top: 5),
+                                child: Text(
+                                  romanNumerals[classRooms[index]['grade']]!,
+                                  style: TextStyle(
+                                      fontSize: screenSize.width * 0.1,
+                                      color: Colors.black54,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 );
               })

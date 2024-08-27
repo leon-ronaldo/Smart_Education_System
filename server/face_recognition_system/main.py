@@ -41,7 +41,8 @@ def _display_face(draw, bounding_box, name):
     )
 
 def encode_known_faces(
-    model: str = "hog", encodings_location: Path = DEFAULT_ENCODINGS_PATH
+    encodings_location: Path,
+    model: str = "hog"
 ) -> None:
     names = []
     encodings = []
@@ -60,6 +61,8 @@ def encode_known_faces(
     name_encodings = {"names": names, "encodings": encodings}
     with encodings_location.open(mode="wb") as f:
         pickle.dump(name_encodings, f)
+        
+    return {'message': 'success'}
 
 def _recognize_face(unknown_encoding, loaded_encodings):
     boolean_matches = face_recognition.compare_faces(
@@ -76,8 +79,8 @@ def _recognize_face(unknown_encoding, loaded_encodings):
 def recognize_faces(
     # attendance: list,
     image_location: str,
+    encodings_location: Path,
     model: str = "hog",
-    encodings_location: Path = DEFAULT_ENCODINGS_PATH,
 ) -> None:
     attendance = ["chris_evans", "chris_hemsworth", "jeremy_renner", "mark_rufallow", "robert_downey_jr", "tom_hiddleston"]
     
@@ -120,9 +123,16 @@ def recognize_faces(
 
 if __name__ == "__main__":
     try:
-        image_data_base64 = sys.argv[1]
-        result = recognize_faces(image_location=image_data_base64)
-        print(json.dumps(result))
+        if (sys.argv[1] == "recognize"):
+            image_data_base64 = sys.argv[2]
+            encodings_location = sys.argv[3]
+            result = recognize_faces(image_location=image_data_base64, encodings_location=os.path.join(os.getcwd(), f'face_recognition_system/test/{encodings_location}'))
+            print(json.dumps(result))
+            
+        elif (sys.argv[1] == "setup"):
+            encodings_path = sys.argv[2]
+            result = encode_known_faces(encodings_location=os.path.join(os.getcwd(), f'face_recognition_system/training/{encodings_path}'))
+            print(json.dumps(result))
     
     except Exception as e:
         print(json.dumps({'error': e}))
@@ -130,3 +140,4 @@ if __name__ == "__main__":
     finally:
         sys.stdout.flush()
         
+    # python main.py setup path_to_training_data path_to_encodings
