@@ -15,4 +15,21 @@ app.use(require('./middleware/errorHandler'))
 
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
+    const https = require('https');
+    const interval = 8 * 60 * 1000; // 8 minutes in milliseconds
+    
+    function sendRequest(url) {
+      https.get(url, (res) => {
+        res.on('data', (d) => {
+          process.stdout.write(d);
+        });
+      }).on('error', (err) => {
+        console.error(err);
+      });
+    }
+    
+    setInterval(() => {
+      const url = 'https://smart-education-system.onrender.com/classRoom/';
+      sendRequest(url);
+    }, interval);
 });
