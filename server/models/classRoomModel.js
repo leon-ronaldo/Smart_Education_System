@@ -6,6 +6,10 @@ const classRoomSchema = mongoose.Schema(
         type: String,
         required: [true, 'class is missing'],
       },
+      collegeCode: {
+        type: String,
+        required: [true, 'collegeCode is missing'],
+      },
       grade: {
         type: Number,
         required: [true, 'class is missing'],
@@ -19,6 +23,9 @@ const classRoomSchema = mongoose.Schema(
         required: [true, 'mentor is missing'],
       },
       students: {
+        type: Array
+      },
+      encodings: {
         type: Array
       },
       smartBoardID: {

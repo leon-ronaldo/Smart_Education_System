@@ -1,4 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Request Camera Permission -->  
+    <uses-permission android:name="android.permission.CAMERA"/>  
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <!-- Declare Camera Feature -->  
+    <uses-feature android:name="android.hardware.camera" />
     <application
         android:label="smart_students_app"
         android:name="${applicationName}"

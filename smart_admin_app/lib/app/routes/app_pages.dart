@@ -2,6 +2,8 @@ import 'package:get/get.dart';
 
 import '../modules/add_classroom_page/bindings/add_classroom_page_binding.dart';
 import '../modules/add_classroom_page/views/add_classroom_page_view.dart';
+import '../modules/classRoom_page/bindings/class_room_page_binding.dart';
+import '../modules/classRoom_page/views/class_room_page_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 
@@ -10,7 +12,7 @@ part 'app_routes.dart';
 class AppPages {
   AppPages._();
 
-  static const INITIAL = Routes.ADD_CLASSROOM_PAGE;
+  static const INITIAL = Routes.HOME;
 
   static final routes = [
     GetPage(
@@ -22,6 +24,11 @@ class AppPages {
       name: _Paths.ADD_CLASSROOM_PAGE,
       page: () => const AddClassroomPageView(),
       binding: AddClassroomPageBinding(),
+    ),
+    GetPage(
+      name: _Paths.CLASS_ROOM_PAGE,
+      page: () => const ClassRoomPageView(),
+      binding: ClassRoomPageBinding(),
     ),
   ];
 }

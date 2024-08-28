@@ -15,6 +15,7 @@ const createClassRoom = asyncHandler(async (req, res) => {
     try {
         const classRoom = await classRoomModel.create({
             classRoomID: req.body.classRoomID,
+            collegeCode: req.body.collegCode,
             grade: req.body.grade,
             section: req.body.class,
             mentor: req.body.mentor,
@@ -28,6 +29,16 @@ const createClassRoom = asyncHandler(async (req, res) => {
         res.status(400).json({ 'error': error });
         res.end();
     }
+});
+
+//get all classroom
+
+const getClassRooms = asyncHandler(async (req, res) => {
+    const classRooms = await classRoomModel.find({});
+
+    console.log(classRooms);
+    res.status(200).json(classRooms);
+    res.end();
 });
 
 //get single classroom
@@ -49,17 +60,13 @@ const getClassRoom = asyncHandler(async (req, res) => {
 const addAttendance = asyncHandler(async (req, res) => {
     if (!req.file) {
         console.log("no file uploaded");
-        res.end(400).json({ message: 'no file uploaded' });
+        res.end(400).json({message: 'no file uploaded'});
         return;
     }
 
-    console.log(req.file);
-
     const photo = req.file;
 
-    const base64String = buffer.from(photo.buffer).toString('base64');
-
-    console.log(base64String);
+    const base64String = Buffer.from(photo.buffer).toString('base64');
 
     const attendance = await runAttendanceScript(base64String);
     console.log(attendance);
@@ -123,4 +130,4 @@ async function runAttendanceScript(fileBuffer) {
     });
 }
 
-module.exports = { createClassRoom, getClassRoom, addAttendance, runAttendanceScript };
+module.exports = { createClassRoom, getClassRooms, getClassRoom, addAttendance, runAttendanceScript };

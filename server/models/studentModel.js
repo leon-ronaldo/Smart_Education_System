@@ -19,7 +19,7 @@ const studentSchema = mongoose.Schema(
             required: [true, 'age is missing'],
         },
         dateOfBirth: {
-            type: Date,
+            type: String,
             required: [true, 'dateOfBirth is missing'],
         },
         class: {
@@ -29,6 +29,10 @@ const studentSchema = mongoose.Schema(
         section: {
             type: String,
             required: [true, 'section is missing'],
+        },
+        classRoomID: {
+            type: String,
+            required: [true, 'class id is missing'],
         },
         gender: {
             type: String,
@@ -48,7 +52,14 @@ const studentSchema = mongoose.Schema(
         },
         photoUrl: {
             type: String,
-            required: [true, 'address is missing'],
+        },
+        photoData1: {
+            type: String,
+            required: [true, 'photodata is missing'],
+        },
+        photoData2: {
+            type: String,
+            required: [true, 'photodata is missing'],
         },
         analyticsData: {
             type: Map, 
