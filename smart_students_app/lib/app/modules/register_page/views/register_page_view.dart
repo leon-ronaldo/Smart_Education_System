@@ -89,24 +89,7 @@ class RegisterPageHeroImage extends GetWidget<RegisterPageController> {
             style: TextStyle(fontSize: screenSize.width * 0.05),
           ),
         ),
-        Container(
-          margin: const EdgeInsets.symmetric(horizontal: 20),
-          child: Obx(
-            () => Row(
-              children: List.generate(
-                  4,
-                  (index) => Container(
-                        color: Colors.blueAccent,
-                        height: 2,
-                        width: (controller.pageController.value.page ?? 0.0)
-                                    .toInt() ==
-                                index
-                            ? screenSize.width * 0.1
-                            : 2,
-                      )),
-            ),
-          ),
-        )
+      
       ],
     );
   }
