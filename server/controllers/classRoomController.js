@@ -22,6 +22,7 @@ const createClassRoom = asyncHandler(async (req, res) => {
             smartBoardID: req.body.smartBoardID,
             noiseControllerID: req.body.noiseControllerID,
             fireSensorID: req.body.fireSensorID,
+            collegeCode: req.body.collegeCode
         });
         res.status(200).json(classRoom);
         res.end();
