@@ -1,8 +1,9 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 import 'package:get/get.dart';
-import 'package:smart_students_app/main.dart';
+import 'package:smart_staffs_app/main.dart';
 
 import '../controllers/register_page_controller.dart';
 
@@ -18,8 +19,12 @@ class RegisterPageView extends GetView<RegisterPageController> {
           child: SizedBox(
             height: screenSize.height,
             width: screenSize.width,
-            child: Obx(
-              () => AnimatedCrossFade(
+            child: Obx(() {
+              if (controller.success.value) {
+                Future.delayed(const Duration(milliseconds: 1500),
+                    () => Get.toNamed('/home'));
+              }
+              return AnimatedCrossFade(
                 duration: const Duration(milliseconds: 500),
                 crossFadeState: controller.success.value
                     ? CrossFadeState.showSecond
@@ -31,13 +36,17 @@ class RegisterPageView extends GetView<RegisterPageController> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                          height: screenSize.height * 0.25,
+                          height: screenSize.height * 0.3,
                           width: screenSize.width,
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 20),
                           decoration: const BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
                               image: DecorationImage(
                                   image: NetworkImage(
-                                      'https://cdn.dribbble.com/userupload/12661800/file/original-5fbd500ed3d1077e942826563ee8f5f0.png?resize=1200x900'),
-                                  fit: BoxFit.fitWidth))),
+                                      'https://cdn.dribbble.com/users/1363231/screenshots/8052893/media/bc537a463af4ec5e78ec5082a9277adb.png?resize=1000x750&vertical=center'),
+                                  fit: BoxFit.cover))),
                       Text('Hello ${controller.firstNameController.text}',
                           style: TextStyle(
                               height: 2,
@@ -47,7 +56,7 @@ class RegisterPageView extends GetView<RegisterPageController> {
                       Container(
                         margin: const EdgeInsets.symmetric(horizontal: 20),
                         child: Text(
-                            'Explore Our App And Experience The Best Learning Ever...',
+                            'Explore Our App And Experience The Best Teaching Experience Ever...',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontSize: screenSize.width * 0.035,
@@ -74,8 +83,8 @@ class RegisterPageView extends GetView<RegisterPageController> {
                     RegisterPageNextButtons()
                   ],
                 ),
-              ),
-            ),
+              );
+            }),
           ),
         ),
       ),
@@ -198,12 +207,13 @@ class RegisterPageHeroImage extends GetWidget<RegisterPageController> {
           width: screenSize.width,
           decoration: const BoxDecoration(
               image: DecorationImage(
-                  image: NetworkImage(
-                      "https://cdn.dribbble.com/userupload/16074872/file/original-ac696b4f53280f57e83b7dbe9bda6911.png?resize=1200x900"),
+                  image: AssetImage(
+                      "assets/images/hero-1.png"),
                   fit: BoxFit.fitWidth)),
         ),
         Container(
-          margin: const EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          margin: const EdgeInsets.only(top: 20),
           child: Text(
             'Your window into your immersive learning experience with technology.',
             textAlign: TextAlign.center,
@@ -254,7 +264,7 @@ class RegisterPageStudentGeneralDetailsSection
                   TextField(
                       onChanged: (text) =>
                           controller.filterClassRooms(text.toLowerCase()),
-                      controller: controller.classRoomController,
+                      controller: controller.mentorClassController,
                       decoration: const InputDecoration(
                           contentPadding: EdgeInsets.only(left: 10),
                           border: OutlineInputBorder(
@@ -276,7 +286,7 @@ class RegisterPageStudentGeneralDetailsSection
                               controller.classRoomsThatAppear.length, (index) {
                             return InkResponse(
                               onTap: () {
-                                controller.classRoomController.text =
+                                controller.mentorClassController.text =
                                     '${controller.classRoomsThatAppear.value[index]['collegeCode']} ${romanNumerals[controller.classRoomsThatAppear.value[index]['grade']]} ${controller.classRoomsThatAppear.value[index]['section']}';
                                 controller.selectedClassCode.value = controller
                                     .classRoomsThatAppear
@@ -312,7 +322,7 @@ class RegisterPageStudentGeneralDetailsSection
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            ['Register Number', 'Age'][classSelctionIndex],
+                            ['Staff ID', 'Age'][classSelctionIndex],
                             style: TextStyle(
                                 fontSize: screenSize.width * 0.035,
                                 color: Colors.black54,
@@ -324,7 +334,7 @@ class RegisterPageStudentGeneralDetailsSection
                                 child: TextField(
                                   maxLength: classSelctionIndex == 1 ? 5 : null,
                                   controller: [
-                                    controller.studentIDController,
+                                    controller.staffIDController,
                                     controller.ageController
                                   ][classSelctionIndex],
                                   decoration: const InputDecoration(
@@ -403,7 +413,7 @@ class RegisterPageStudentGeneralDetailsSection
                       controller.lastNameController,
                       null,
                       controller.bDayController,
-                      controller.classRoomController,
+                      controller.mentorClassController,
                       null
                     ][index],
                     decoration: const InputDecoration(
@@ -433,13 +443,12 @@ class RegisterPagePersonalDetailsSection
         children: List.generate(5, (index) {
           if (index == 0) {
             return Container(
-              height: screenSize.height * 0.28,
+              height: screenSize.height * 0.3,
               width: screenSize.width,
               decoration: const BoxDecoration(
                   image: DecorationImage(
-                      image: NetworkImage(
-                          "https://cdn.dribbble.com/userupload/12171142/file/original-901486589d88c1178170f1ee56b3a77e.png?resize=1024x768&vertical=center"),
-                      fit: BoxFit.fitWidth)),
+                      image: AssetImage("assets/images/hero-2.png"),
+                      fit: BoxFit.fitHeight)),
             );
           }
 
@@ -505,7 +514,8 @@ class RegisterPagePersonalDetailsSection
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text([null, null, 'Email', 'Address', null][index].toString(),
+                Text(
+                    [null, null, 'Email', 'Department', null][index].toString(),
                     style: TextStyle(
                         fontSize: screenSize.width * 0.035,
                         color: Colors.black54,
@@ -515,10 +525,9 @@ class RegisterPagePersonalDetailsSection
                       null,
                       null,
                       controller.emailController,
-                      controller.addressController,
+                      controller.departmentController,
                       null
                     ][index],
-                    maxLines: index == 3 ? 3 : null,
                     decoration: InputDecoration(
                         contentPadding: EdgeInsets.only(
                             left: 10, top: index == 3 ? 15 : 0.0),
@@ -538,101 +547,31 @@ class RegisterPageClassAndPhotoDetailsSection
     extends GetWidget<RegisterPageController> {
   const RegisterPageClassAndPhotoDetailsSection({super.key});
 
+  final pdfSvg = 'assets/icons/pdf-icon.svg';
+  final jpgSvg = 'assets/icons/jpg-icon.svg';
+  final pngSvg = 'assets/icons/png-icon.svg';
+
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.sizeOf(context);
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Stack(
-              alignment: Alignment.center,
-              children: [
-                Container(
-                  width: screenSize.height * 0.26,
-                  height: screenSize.height * 0.26,
-                  decoration: const BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage('assets/images/frame.png'),
-                          fit: BoxFit.fitHeight)),
-                ),
-                Obx(
-                  () => Visibility(
-                    replacement: InkResponse(
-                        onTap: () {
-                          controller
-                              .pickFileFromGallery(controller.firstfilePath);
-                        },
-                        child: const Icon(Icons.add,
-                            color: Colors.white, size: 20)),
-                    visible:
-                        controller.firstfilePath.value == "" ? false : true,
-                    child: InkResponse(
-                      onTap: () => controller
-                          .pickFileFromGallery(controller.firstfilePath),
-                      child: Container(
-                        margin: const EdgeInsets.only(bottom: 15, left: 2),
-                        height: screenSize.height * 0.18,
-                        width: screenSize.height * 0.2,
-                        child: Image.file(File(controller.firstfilePath.value),
-                            fit: BoxFit.cover),
-                      ),
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Stack(
-              alignment: Alignment.center,
-              children: [
-                Container(
-                  width: screenSize.height * 0.26,
-                  height: screenSize.height * 0.26,
-                  decoration: const BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage('assets/images/frame.png'),
-                          fit: BoxFit.fitHeight)),
-                ),
-                Obx(
-                  () => Visibility(
-                    replacement: InkResponse(
-                        onTap: () {
-                          controller
-                              .pickFileFromGallery(controller.secondfilePath);
-                        },
-                        child: const Icon(Icons.add,
-                            color: Colors.white, size: 20)),
-                    visible:
-                        controller.secondfilePath.value == "" ? false : true,
-                    child: InkResponse(
-                      onTap: () => controller
-                          .pickFileFromGallery(controller.secondfilePath),
-                      child: Container(
-                        margin: const EdgeInsets.only(bottom: 15, left: 2),
-                        height: screenSize.height * 0.18,
-                        width: screenSize.height * 0.2,
-                        child: Image.file(File(controller.secondfilePath.value),
-                            fit: BoxFit.cover),
-                      ),
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ],
+        Container(
+          height: screenSize.height * 0.3,
+          margin: EdgeInsets.only(top: screenSize.height * 0.08),
+          width: screenSize.width,
+          decoration: const BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage("assets/images/time-table.png"),
+                  fit: BoxFit.fitHeight)),
         ),
         Container(
-          margin: const EdgeInsets.only(top: 30),
+          margin: const EdgeInsets.only(top: 25),
           alignment: Alignment.center,
           width: screenSize.width,
           child: Text(
-            'Upload Your Images',
+            'Upload Your Time Table',
             style: TextStyle(fontSize: screenSize.width * 0.04),
           ),
         ),
@@ -641,11 +580,88 @@ class RegisterPageClassAndPhotoDetailsSection
           margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
           width: screenSize.width,
           child: Text(
-            'It is recommended to uploaded a clearer image of yourself (like a passport photo)',
+            'Capture a picture of your time table to schedule it in the app.',
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: screenSize.width * 0.032),
           ),
         ),
+        Obx(
+          () => Container(
+              child: controller.filePath.value == ""
+                  ? InkResponse(
+                      onTap: () => controller.pickFileFromDevice(),
+                      child: Container(
+                        margin: EdgeInsets.only(top: screenSize.height * 0.04),
+                        alignment: Alignment.center,
+                        width: screenSize.width,
+                        child: Text(
+                          '+',
+                          style: TextStyle(fontSize: screenSize.width * 0.15),
+                        ),
+                      ),
+                    )
+                  : Obx(() => AnimatedContainer(
+                      duration: const Duration(milliseconds: 250),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 18),
+                      alignment: Alignment.center,
+                      margin: EdgeInsets.fromLTRB(
+                          20, screenSize.height * 0.05, 20, 0),
+                      width: screenSize.width,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                          color: Colors.grey.shade300,
+                          boxShadow: [
+                            BoxShadow(
+                                    offset: const Offset(0, 4),
+                                    color: Colors.grey.shade200,
+                                    blurRadius: 3)
+                                .scale(3)
+                          ]),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Container(
+                                  margin: const EdgeInsets.only(right: 10),
+                                  child: SvgPicture.asset(
+                                      controller.filePath.contains('png')
+                                          ? pngSvg
+                                          : controller.filePath.contains('jpg')
+                                              ? jpgSvg
+                                              : pdfSvg,
+                                      height: screenSize.width * 0.08,
+                                      width: screenSize.width * 0.08)),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    controller.filePath.value.split('/')[
+                                        controller.filePath.value
+                                                .split('/')
+                                                .length -
+                                            1],
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontSize: screenSize.width * 0.032),
+                                  ),
+                                  Text(
+                                    '${controller.fileSize.value} mb',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontSize: screenSize.width * 0.028),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          InkResponse(
+                              onTap: () => controller.removeFile(),
+                              child: Icon(Icons.close))
+                        ],
+                      )))),
+        )
       ],
     );
   }

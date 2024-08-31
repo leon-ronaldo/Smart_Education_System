@@ -4,6 +4,10 @@
 
     <!-- Declare Camera Feature -->  
     <uses-feature android:name="android.hardware.camera" />  
+
+    <!-- Declare File Permissions -->  
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    
     <application
         android:label="smart_staffs_app"
         android:name="${applicationName}"

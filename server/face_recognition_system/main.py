@@ -44,25 +44,29 @@ def encode_known_faces(
     encodings_location: Path,
     model: str = "hog"
 ) -> None:
-    names = []
-    encodings = []
+    try:
+        names = []
+        encodings = []
 
-    for filepath in Path("training").glob("*/*"):
-        name = filepath.parent.name
-        image = face_recognition.load_image_file(filepath)
+        for filepath in Path(f"training/{encodings_location}").glob("*/*"):
+            name = filepath.parent.name
+            image = face_recognition.load_image_file(filepath)
 
-        face_locations = face_recognition.face_locations(image, model=model)
-        face_encodings = face_recognition.face_encodings(image, face_locations)
+            face_locations = face_recognition.face_locations(image, model=model)
+            face_encodings = face_recognition.face_encodings(image, face_locations)
 
-        for encoding in face_encodings:
-            names.append(name)
-            encodings.append(encoding)
+            for encoding in face_encodings:
+                names.append(name)
+                encodings.append(encoding)
 
-    name_encodings = {"names": names, "encodings": encodings}
-    with encodings_location.open(mode="wb") as f:
-        pickle.dump(name_encodings, f)
-        
-    return {'message': 'success'}
+        name_encodings = {"names": names, "encodings": encodings}
+        with open(f'{encodings_location}/encodings.pkl', mode="wb") as f:
+            pickle.dump(name_encodings, f)
+            
+        return {'message': 'success'}
+    
+    except Exception as error:
+        return f'{error}'
 
 def _recognize_face(unknown_encoding, loaded_encodings):
     boolean_matches = face_recognition.compare_faces(

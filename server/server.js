@@ -11,6 +11,7 @@ app.use(express.json());
 app.use('/classRoom', require('./routes/classRoomRoute'));
 app.use('/students', require('./routes/stuentsRoute'));
 app.use('/admin', require('./routes/adminRoute'));
+app.use('/staffs', require('./routes/staffsRoute'));
 app.use(require('./middleware/errorHandler'))
 
 app.listen(port, () => {

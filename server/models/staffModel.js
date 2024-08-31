@@ -26,6 +26,10 @@ const staffSchema = mongoose.Schema(
         type: String,
         required: [true, 'gender is missing'],
       },
+      department: {
+        type: String,
+        required: [true, 'handling subject is missing'],
+      },
       phone: {
         type: String,
         required: [true, 'phone is missing'],
@@ -38,123 +42,124 @@ const staffSchema = mongoose.Schema(
         type: String,
       },
       mentoringClass: {
-        type: Number,
+        type: String,
       },
       timetable: {
-        monday: [
-          {
-            hourName: {
-              type: String,
-            },
-            class: {
-              type: Number,
-            },
-            section: {
-              type: String,
-            },
-            hourStart: {
-              type: Date,
-            },
-            hourEnd: {
-              type: Date,
-            },
-          },
-        ],
-        tuesday: [
-          {
-            hourName: {
-              type: String,
-            },
-            class: {
-              type: Number,
-            },
-            section: {
-              type: String,
-            },
-            hourStart: {
-              type: Date,
-            },
-            hourEnd: {
-              type: Date,
-            },
-          },
-        ],
-        wednesday: [
-          {
-            hourName: {
-              type: String,
-            },
-            class: {
-              type: Number,
-            },
-            section: {
-              type: String,
-            },
-            hourStart: {
-              type: Date,
-            },
-            hourEnd: {
-              type: Date,
-            },
-          },
-        ],
-        thursday: [
-          {
-            hourName: {
-              type: String,
-            },
-            class: {
-              type: Number,
-            },
-            section: {
-              type: String,
-            },
-            hourStart: {
-              type: Date,
-            },
-            hourEnd: {
-              type: Date,
-            },
-          },
-        ],
-        friday: [
-          {
-            hourName: {
-              type: String,
-            },
-            class: {
-              type: Number,
-            },
-            section: {
-              type: String,
-            },
-            hourStart: {
-              type: Date,
-            },
-            hourEnd: {
-              type: Date,
-            },
-          },
-        ],
-        saturday: [
-          {
-            hourName: {
-              type: String,
-            },
-            class: {
-              type: Number,
-            },
-            section: {
-              type: String,
-            },
-            hourStart: {
-              type: Date,
-            },
-            hourEnd: {
-              type: Date,
-            },
-          },
-        ],
+        type: String,
+        // monday: [
+        //   {
+        //     hourName: {
+        //       type: String,
+        //     },
+        //     class: {
+        //       type: Number,
+        //     },
+        //     section: {
+        //       type: String,
+        //     },
+        //     hourStart: {
+        //       type: Date,
+        //     },
+        //     hourEnd: {
+        //       type: Date,
+        //     },
+        //   },
+        // ],
+        // tuesday: [
+        //   {
+        //     hourName: {
+        //       type: String,
+        //     },
+        //     class: {
+        //       type: Number,
+        //     },
+        //     section: {
+        //       type: String,
+        //     },
+        //     hourStart: {
+        //       type: Date,
+        //     },
+        //     hourEnd: {
+        //       type: Date,
+        //     },
+        //   },
+        // ],
+        // wednesday: [
+        //   {
+        //     hourName: {
+        //       type: String,
+        //     },
+        //     class: {
+        //       type: Number,
+        //     },
+        //     section: {
+        //       type: String,
+        //     },
+        //     hourStart: {
+        //       type: Date,
+        //     },
+        //     hourEnd: {
+        //       type: Date,
+        //     },
+        //   },
+        // ],
+        // thursday: [
+        //   {
+        //     hourName: {
+        //       type: String,
+        //     },
+        //     class: {
+        //       type: Number,
+        //     },
+        //     section: {
+        //       type: String,
+        //     },
+        //     hourStart: {
+        //       type: Date,
+        //     },
+        //     hourEnd: {
+        //       type: Date,
+        //     },
+        //   },
+        // ],
+        // friday: [
+        //   {
+        //     hourName: {
+        //       type: String,
+        //     },
+        //     class: {
+        //       type: Number,
+        //     },
+        //     section: {
+        //       type: String,
+        //     },
+        //     hourStart: {
+        //       type: Date,
+        //     },
+        //     hourEnd: {
+        //       type: Date,
+        //     },
+        //   },
+        // ],
+        // saturday: [
+        //   {
+        //     hourName: {
+        //       type: String,
+        //     },
+        //     class: {
+        //       type: Number,
+        //     },
+        //     section: {
+        //       type: String,
+        //     },
+        //     hourStart: {
+        //       type: Date,
+        //     },
+        //     hourEnd: {
+        //       type: Date,
+        //     },
+        //   },
+        // ],
       },
     },
     {

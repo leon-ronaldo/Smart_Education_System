@@ -37,7 +37,7 @@ class AttendancePageController extends GetxController {
 
   Future<void> getClass() async {
     final result =
-        await http.get(Uri.parse('http://localhost:5000/classRoom/${classID}'));
+        await http.get(Uri.parse('http://10.0.2.2:5000/classRoom/${classID}'));
 
     if (result.statusCode == 404) {
       print('cannot get class');
@@ -66,7 +66,7 @@ class AttendancePageController extends GetxController {
 
   Future<void> uploadImage() async {
     final request = http.MultipartRequest('POST',
-        Uri.parse('http://localhost:5000/classRoom/$classID/addAttendance'));
+        Uri.parse('http://10.0.2.2:5000/classRoom/$classID/addAttendance'));
 
     request.files.add(await http.MultipartFile.fromPath(
         'picture', capturedImagePath.value));
