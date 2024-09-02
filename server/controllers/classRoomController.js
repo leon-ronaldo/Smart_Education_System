@@ -1,6 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const classRoomModel = require("../models/classRoomModel");
-const buffer = require('buffer');
+const { Buffer } = require('buffer');
 const path = require('path');
 
 //create a classroom
@@ -59,6 +59,14 @@ const getClassRoom = asyncHandler(async (req, res) => {
 });
 
 const addAttendance = asyncHandler(async (req, res) => {
+    const classRoom = await classRoomModel.findOne({ classRoomID: req.params.id });
+
+    if (!classRoom) {
+        console.log('no such classroom');
+        res.status(404).json({ message: 'no such classroom in your institution, please create one or check again.' });
+        res.end();
+    }
+
     if (!req.file) {
         console.log("no file uploaded");
         res.end(400).json({message: 'no file uploaded'});
@@ -69,22 +77,34 @@ const addAttendance = asyncHandler(async (req, res) => {
 
     const base64String = Buffer.from(photo.buffer).toString('base64');
 
-    const attendance = await runAttendanceScript(base64String);
+    const attendance = await runAttendanceScript(base64String, classRoom);
     console.log(attendance);
-    res.status(200).json();
+    res.status(200).json(attendance);
     res.end();
 });
 
-async function runAttendanceScript(fileBuffer) {
+async function runAttendanceScript(fileBuffer, classroom) {
     return new Promise((resolve, reject) => {
         // Create a temporary file to store the image data
         const fs = require('fs');
         let base64Image = fileBuffer.split(';base64,').pop()
-        const tmpFileName = `${Math.random().toString(36).substring(2, 15)}.jpg`;
-        const tmpFilePath = path.join(__dirname, '../face_recognition_system', tmpFileName);
-        console.log(__dirname);
+
+        const tmpFileName = `${classroom.classRoomID}${Math.random().toString(36).substring(2, 15)}.jpg`;
+        const tmpFilePath = path.join(__dirname, '../face_recognition_system/test', tmpFileName);
+
+        const encodingsFileName = `${classroom.classRoomID}Encodings.pkl`;
+        const encodingsFilePath = path.join(__dirname, '../face_recognition_system/test', encodingsFileName);
+
+        console.log(tmpFilePath);
 
         fs.writeFileSync(tmpFilePath, base64Image, { encoding: 'base64' }, (err) => {
+            if (err) {
+                console.log('errr bro');
+                return reject(err);
+            }
+        });
+
+        fs.writeFileSync(encodingsFilePath, classroom.encodings.split(';base64,').pop(), { encoding: 'base64' }, (err) => {
             if (err) {
                 console.log('errr bro');
                 return reject(err);
@@ -94,7 +114,7 @@ async function runAttendanceScript(fileBuffer) {
         const spawn = require('child_process').spawn;
 
         // Spawn the Python process with the file path as an argument
-        const pythonProcess = spawn(path.join(__dirname, '../face_recognition_system/Scripts/python.exe'), [path.join(__dirname, '../face_recognition_system/main.py'), tmpFilePath]);
+        const pythonProcess = spawn(path.join(__dirname, '../face_recognition_system/Scripts/python.exe'), [path.join(__dirname, '../face_recognition_system/main.py'), 'recognize', tmpFileName, encodingsFileName]);
 
         let currentAttendance = "";
 
@@ -110,11 +130,17 @@ async function runAttendanceScript(fileBuffer) {
         });
 
         // Handle process exit
-        pythonProcess.on('close', (code) => {
+        pythonProcess.on('close', async (code) => {
             // Ensure the temporary file is deleted regardless of success or failure
-            fs.unlink(tmpFilePath, (err) => {
+            await fs.rm(tmpFilePath, { recursive: true, force: true }, (err) => {
                 if (err) {
-                    console.error(`Error deleting temporary file: ${err}`);
+                    console.log(err);
+                }
+            });
+
+            await fs.rm(encodingsFilePath, { recursive: true, force: true }, (err) => {
+                if (err) {
+                    console.log(err);
                 }
             });
 

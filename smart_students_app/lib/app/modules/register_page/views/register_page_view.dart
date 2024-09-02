@@ -10,6 +10,13 @@ class RegisterPageView extends GetView<RegisterPageController> {
   const RegisterPageView({super.key});
   @override
   Widget build(BuildContext context) {
+    [
+      "https://cdn.dribbble.com/userupload/12171142/file/original-901486589d88c1178170f1ee56b3a77e.png?resize=1024x768&vertical=center",
+      "https://cdn.dribbble.com/userupload/16074872/file/original-ac696b4f53280f57e83b7dbe9bda6911.png?resize=1200x900",
+      'https://cdn.dribbble.com/userupload/12661800/file/original-5fbd500ed3d1077e942826563ee8f5f0.png?resize=1200x900'
+    ].forEach((image) {
+      precacheImage(NetworkImage(image), context);
+    });
     final screenSize = MediaQuery.sizeOf(context);
     return Scaffold(
       body: Container(
