@@ -15,7 +15,7 @@ const createClassRoom = asyncHandler(async (req, res) => {
     try {
         const classRoom = await classRoomModel.create({
             classRoomID: req.body.classRoomID,
-            collegeCode: req.body.collegCode,
+            collegeCode: req.body.collegeCode,
             grade: req.body.grade,
             section: req.body.class,
             mentor: req.body.mentor,
