@@ -1,5 +1,6 @@
 const connectDb = require("./config/dbConfig");
 const express = require('express');
+const classRoomModel = require('./models/classRoomModel');
 
 connectDb();
 const app = express();

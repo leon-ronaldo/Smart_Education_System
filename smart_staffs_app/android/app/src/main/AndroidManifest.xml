@@ -5,7 +5,7 @@
     <!-- Declare Camera Feature -->  
     <uses-feature android:name="android.hardware.camera" />  
     <application
-        android:label="smart_staffs_app"
+        android:label="Smart Students Toolkit"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

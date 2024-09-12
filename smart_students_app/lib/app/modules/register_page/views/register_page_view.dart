@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import 'package:get/get.dart';
 import 'package:smart_students_app/main.dart';
@@ -15,71 +16,87 @@ class RegisterPageView extends GetView<RegisterPageController> {
     final screenSize = MediaQuery.sizeOf(context);
     return Scaffold(
       body: Container(
-        color: const Color(0xfff3f3f4),
-        child: SingleChildScrollView(
-          child: SizedBox(
-            height: screenSize.height,
-            width: screenSize.width,
-            child: Obx(
-              () => AnimatedCrossFade(
-                duration: const Duration(milliseconds: 500),
-                crossFadeState: controller.success.value
-                    ? CrossFadeState.showSecond
-                    : CrossFadeState.showFirst,
-                secondChild: Container(
-                  color: const Color(0xffffffff),
-                  height: screenSize.height,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                          height: screenSize.height * 0.25,
-                          width: screenSize.width,
-                          decoration: const BoxDecoration(
-                              image: DecorationImage(
-                                  image: NetworkImage(
-                                      'https://cdn.dribbble.com/userupload/12661800/file/original-5fbd500ed3d1077e942826563ee8f5f0.png?resize=1200x900'),
-                                  fit: BoxFit.fitWidth))),
-                      Text('Hello ${controller.firstNameController.text}',
-                          style: TextStyle(
-                              height: 2,
-                              fontSize: screenSize.width * 0.045,
-                              color: Colors.black54,
-                              fontWeight: FontWeight.bold)),
-                      Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Text(
-                            'Explore Our App And Experience The Best Learning Ever...',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: screenSize.width * 0.035,
-                                color: Colors.black54,
-                                fontWeight: FontWeight.bold)),
-                      )
-                    ],
+          color: const Color(0xfff3f3f4),
+          child: Obx(
+            () => PopScope(
+              canPop: controller.canPop.value,
+                    onPopInvokedWithResult: (didPop, result) {
+            controller.currentPage.value == 0 ? Get.back() : controller.pageController.value.previousPage(duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
+                    },
+                    child: SingleChildScrollView(
+              child: SizedBox(
+                height: screenSize.height,
+                width: screenSize.width,
+                child: Obx(
+                  () => AnimatedCrossFade(
+                    duration: const Duration(milliseconds: 500),
+                    crossFadeState: controller.loading.value ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+                    firstChild: Center(
+                      child: SpinKitCubeGrid(color: Colors.blueAccent,),
+                    ),
+                    secondChild: AnimatedCrossFade(
+                      duration: const Duration(milliseconds: 500),
+                      crossFadeState: controller.success.value
+                          ? CrossFadeState.showSecond
+                          : CrossFadeState.showFirst,
+                      secondChild: Container(
+                        color: const Color(0xffffffff),
+                        height: screenSize.height,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                                height: screenSize.height * 0.25,
+                                width: screenSize.width,
+                                decoration: const BoxDecoration(
+                                    image: DecorationImage(
+                                        image: AssetImage(
+                                            'assets/images/success.pnh'),
+                                        fit: BoxFit.fitWidth))),
+                            Text('Hello ${controller.firstNameController.text}',
+                                style: TextStyle(
+                                    height: 2,
+                                    fontSize: screenSize.width * 0.045,
+                                    color: Colors.black54,
+                                    fontWeight: FontWeight.bold)),
+                            Container(
+                              margin: const EdgeInsets.symmetric(horizontal: 20),
+                              child: Text(
+                                  'Explore Our App And Experience The Best Learning Ever...',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: screenSize.width * 0.035,
+                                      color: Colors.black54,
+                                      fontWeight: FontWeight.bold)),
+                            )
+                          ],
+                        ),
+                      ),
+                      firstChild: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                              width: screenSize.width,
+                              height: screenSize.height * 0.7,
+                              child: PageView(
+                                physics: const NeverScrollableScrollPhysics(),
+                                  controller: controller.pageController.value,
+                                  children: [
+                                    RegisterPageHeroImage(),
+                                    RegisterPageStudentGeneralDetailsSection(),
+                                    RegisterPagePersonalDetailsSection(),
+                                    RegisterPageClassAndPhotoDetailsSection()
+                                  ])),
+                          RegisterPageNextButtons()
+                        ],
+                      ),
+                    ),
                   ),
-                ),
-                firstChild: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                        width: screenSize.width,
-                        height: screenSize.height * 0.7,
-                        child: PageView(
-                            controller: controller.pageController.value,
-                            children: [
-                              RegisterPageHeroImage(),
-                              RegisterPageStudentGeneralDetailsSection(),
-                              RegisterPagePersonalDetailsSection(),
-                              RegisterPageClassAndPhotoDetailsSection()
-                            ])),
-                    RegisterPageNextButtons()
-                  ],
                 ),
               ),
             ),
+                    ),
           ),
-        ),
       ),
     );
   }
@@ -118,9 +135,33 @@ class RegisterPageNextButtons extends GetWidget<RegisterPageController> {
           () => InkResponse(
             onTap: controller.currentPage.value == 3
                 ? () {
+                      for(var path in [controller.firstfilePath, controller.secondfilePath]) {
+                        if (path.value == "") {
+                          Get.snackbar('Warning', 'Add both photos', duration: const Duration(milliseconds: 1500));
+                          return;
+                        }
+                    }
+                    
                     controller.register();
                   }
                 : () {
+                    if (controller.currentPage.value == 1) {
+                      for(var editor in [controller.firstNameController, controller.lastNameController, controller.studentIDController, controller.ageController, controller.bDayController, controller.classRoomController]) {
+                        if (editor.text.isEmpty) {
+                          Get.snackbar('Warning', 'Some fields are missing', duration: const Duration(milliseconds: 1500));
+                          return;
+                        }
+                      }
+                    }
+                    if (controller.currentPage.value == 2) {
+                      for(var editor in [controller.phoneController, controller.genderController, controller.emailController, controller.addressController]) {
+                        if (editor.text.isEmpty) {
+                          Get.snackbar('Warning', 'Some fields are missing', duration: const Duration(milliseconds: 1500));
+                          return;
+                        }
+                      }
+                    }
+                    
                     controller.pageController.value.nextPage(
                         duration: const Duration(milliseconds: 500),
                         curve: Curves.easeInOut);
@@ -200,8 +241,8 @@ class RegisterPageHeroImage extends GetWidget<RegisterPageController> {
           width: screenSize.width,
           decoration: const BoxDecoration(
               image: DecorationImage(
-                  image: NetworkImage(
-                      "https://cdn.dribbble.com/userupload/16074872/file/original-ac696b4f53280f57e83b7dbe9bda6911.png?resize=1200x900"),
+                  image: AssetImage(
+                      "assets/images/hero.png"),
                   fit: BoxFit.fitWidth)),
         ),
         Container(
@@ -439,8 +480,8 @@ class RegisterPagePersonalDetailsSection
               width: screenSize.width,
               decoration: const BoxDecoration(
                   image: DecorationImage(
-                      image: NetworkImage(
-                          "https://cdn.dribbble.com/userupload/12171142/file/original-901486589d88c1178170f1ee56b3a77e.png?resize=1024x768&vertical=center"),
+                      image: AssetImage(
+                          "assets/images/hero2.png"),
                       fit: BoxFit.fitWidth)),
             );
           }
@@ -467,7 +508,7 @@ class RegisterPagePersonalDetailsSection
                             children: [
                               Expanded(
                                 child: TextField(
-                                  maxLength: classSelctionIndex == 1 ? 5 : null,
+                                  maxLength: classSelctionIndex == 1 ? 6 : null,
                                   controller: [
                                     controller.phoneController,
                                     controller.genderController

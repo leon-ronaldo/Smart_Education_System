@@ -25,7 +25,10 @@ class RegisterPageController extends GetxController {
 
   RxBool success = false.obs;
 
+  RxBool canPop = true.obs;
+
   RxBool ready = false.obs;
+  RxBool loading = false.obs;
   RxString firstfilePath = "".obs;
   RxString secondfilePath = "".obs;
 
@@ -41,6 +44,14 @@ class RegisterPageController extends GetxController {
     super.onInit();
     pageController.value.addListener(() {
       currentPage.value = (pageController.value.page ?? 0.0).toInt();
+      if (pageController.value.page! == 0) {
+        canPop.value = true;
+        print('connot pop now');
+      }
+      else {
+        canPop.value = false;
+        print('canpop now');
+      }
     });
     getClassRooms();
   }
@@ -57,7 +68,7 @@ class RegisterPageController extends GetxController {
 
   Future<void> getClassRooms() async {
     final response =
-        await http.get(Uri.parse('http://localhost:5000/classRoom/'));
+        await http.get(Uri.parse('https://smart-education-system.onrender.com/classRoom/'));
     classRooms.value = jsonDecode(response.body);
     classRoomsThatAppear.value = classRooms.value;
     print(classRooms);
@@ -106,32 +117,34 @@ class RegisterPageController extends GetxController {
 
   Future<void> register() async {
     try {
+loading.value = true;
   final request = http.MultipartRequest(
-      'POST', Uri.parse('http://localhost:5000/students/'));
+      'POST', Uri.parse('https://smart-education-system.onrender.com/students/'));
   
   request.files
       .add(await http.MultipartFile.fromPath('file', firstfilePath.value));
   request.files.add(await 
       http.MultipartFile.fromPath('file', secondfilePath.value));
   
-  request.fields['firstName'] = firstNameController.text;
-  request.fields['lastName'] = lastNameController.text;
-  request.fields['studentID'] = studentIDController.text;
-  request.fields['age'] = ageController.text;
-  request.fields['bDay'] = bDayController.text;
-  request.fields['gender'] = genderController.text;
-  request.fields['phone'] = phoneController.text;
-  request.fields['email'] = emailController.text;
-  request.fields['address'] = addressController.text;
+  request.fields['firstName'] = firstNameController.text.trim();
+  request.fields['lastName'] = lastNameController.text.trim();
+  request.fields['studentID'] = studentIDController.text.trim();
+  request.fields['age'] = ageController.text.trim();
+  request.fields['bDay'] = bDayController.text.trim();
+  request.fields['gender'] = genderController.text.trim();
+  request.fields['phone'] = phoneController.text.trim();
+  request.fields['email'] = emailController.text.trim();
+  request.fields['address'] = addressController.text.trim();
   request.fields['classRoomID'] = selectedClassCode.value;
   
   final response = await request.send();
   
   if (response.statusCode == 200) {
     success.value = true;
+    loading.value = false;
   }
 } on Exception catch (e) {
-  // TODO
+  print(e);
 }
   }
 }

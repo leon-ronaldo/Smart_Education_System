@@ -242,15 +242,20 @@ class HomePageClassRoomsSection extends GetWidget<HomeController> {
                         fontWeight: FontWeight.bold),
                   ),
                 ),
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black54),
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(5000))),
-                  child: const Icon(
-                    Icons.add,
-                    size: 24,
+                InkResponse(
+                  onTap: () {
+                    Get.toNamed('/add-classroom-page');
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black54),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(5000))),
+                    child: const Icon(
+                      Icons.add,
+                      size: 24,
+                    ),
                   ),
                 ),
               ],
