@@ -22,7 +22,7 @@ const getClassRoom = asyncHandler(async (req, res) => {
     console.log(req.params.classID);
 
     const classRoom = await classRoomModel.findOne({ classRoomID: req.params.classID });
-    const students = await studentModel.find({ classRoomID: req.params.classID });
+    const students = await studentModel.find({ classRoomID: req.params.classID }).select('studentID firstName lastName');
 
     if (!classRoom) {
         res.status(404).json({ message: "no such classrooms create some" });
@@ -39,13 +39,22 @@ const confirmClassRoom = asyncHandler(async (req, res) => {
     console.log(req.params.classID);
 
     const classRoom = await classRoomModel.findOne({ classRoomID: req.params.classID });
-    const students = await studentModel.find({ classRoomID: req.params.classID });
+    var students = [];
+
+    console.log(req.body.students[0].studentID);
+    
+    for (var index = 0; index < req.body.students.length; index++) {
+        console.log(req.body.students[index]);
+        students.push(await studentModel.findOne({ studentID: req.body.students[index].studentID }));
+    }
 
     if (!classRoom) {
         res.status(404).json({ message: "no such classrooms create some" });
         res.end();
         return;
     }
+
+    console.log(students);
 
     //image creation of each student
 
@@ -127,7 +136,7 @@ const confirmClassRoom = asyncHandler(async (req, res) => {
             console.error('Error deleting directory:', error);
         }
 
-        console.log({ status });
+        console.log({ mesage: status });
         res.status(200).json({ message: status.message });
         res.end();
     });

@@ -116,8 +116,15 @@ class ClassRoomPageHeroSection extends GetWidget<ClassRoomPageController> {
   }
 }
 
-class ClassRoomPageStudentsSection extends GetWidget<ClassRoomPageController> {
+class ClassRoomPageStudentsSection extends StatefulWidget {
   const ClassRoomPageStudentsSection({super.key});
+
+  @override
+  State<ClassRoomPageStudentsSection> createState() => _ClassRoomPageStudentsSectionState();
+}
+
+class _ClassRoomPageStudentsSectionState extends State<ClassRoomPageStudentsSection> {
+  final controller = Get.find<ClassRoomPageController>();
 
   @override
   Widget build(BuildContext context) {
@@ -138,18 +145,35 @@ class ClassRoomPageStudentsSection extends GetWidget<ClassRoomPageController> {
                   fontWeight: FontWeight.bold),
             ),
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: List.generate(
-              controller.students.length,
-              (index) => Container(
-                margin: const EdgeInsets.only(bottom: 10),
-                child: Text(
-                  '**${controller.students[index]['studentID']} - ${controller.students[index]['firstName']} ${controller.students[index]['lastName']}',
-                  style: TextStyle(
-                      fontSize: screenSize.width * 0.04,
-                      color: Colors.black54,
-                      fontWeight: FontWeight.bold),
+          SizedBox(
+            width: screenSize.width,
+            height: screenSize.height * 0.7,
+            child: Obx(
+              () => ListView.builder(
+                shrinkWrap: true,
+                itemCount: controller.studentsThatAppear.value.length,
+                itemBuilder: 
+                  (context, index) => Container(
+                    margin: const EdgeInsets.only(bottom: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '**${controller.studentsThatAppear.value[index]['studentID']} - ${controller.studentsThatAppear.value[index]['firstName']} ${controller.studentsThatAppear.value[index]['lastName']}',
+                          style: TextStyle(
+                              fontSize: screenSize.width * 0.04,
+                              color: Colors.black54,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        ElevatedButton(onPressed: () {
+                          controller.studentsThatAppear.value.removeAt(index);
+                          setState(() {
+                            
+                          });
+                        }, style: ElevatedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10)))), child: Text('Remove this student'))
+                      ],
+                    ),
+                  
                 ),
               ),
             ),
@@ -161,7 +185,7 @@ class ClassRoomPageStudentsSection extends GetWidget<ClassRoomPageController> {
             child: Container(
               width: screenSize.width,
               alignment: Alignment.center,
-              margin: const EdgeInsets.only(top: 15),
+              margin: const EdgeInsets.only(top: 15, bottom: 20),
               padding: const EdgeInsets.all(15),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(8)),

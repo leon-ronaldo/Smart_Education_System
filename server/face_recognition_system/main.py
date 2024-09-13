@@ -128,6 +128,8 @@ def recognize_faces(
             # print(name, bounding_box)
             currentAttendance[name] = 'present'
             # _display_face(draw, bounding_box, name)
+        
+        return currentAttendance
     
     except Exception as error:
         return f'{error}'
@@ -136,8 +138,6 @@ def recognize_faces(
     # print(currentAttendance)
     # del draw
     # pillow_image.show()
-    
-    return currentAttendance
 
 if __name__ == "__main__":
     try:

@@ -5,9 +5,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 class AddClassroomPageController extends GetxController {
-  final profileUrl =
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Harvard_University_coat_of_arms.svg/640px-Harvard_University_coat_of_arms.svg.png';
-  final instituionAcronym = 'snsct';
+  final profileUrl = 
       'https://snscourseware.org/images/SNS%20Institutionsapp.png';
   final instituionAcronym = 'snsct';
 
@@ -65,7 +63,7 @@ class AddClassroomPageController extends GetxController {
     }
 
     final response =
-        await http.post(Uri.parse('https://smart-education-system.onrender.com/classRoom/'),
+        await http.post(Uri.parse('http://localhost:5000/classRoom/'),
             headers: {'Content-Type': 'application/json'},
             body: jsonEncode({
               'classRoomID': classIDController.value.text,

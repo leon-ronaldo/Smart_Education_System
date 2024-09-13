@@ -9,6 +9,6 @@ const {
 
 router.route('/:id').get(getClassRooms);
 router.route('/:id/:classID').get(getClassRoom);
-router.route('/:id/:classID/confirm').get(confirmClassRoom);
+router.route('/:id/:classID/confirm').post(confirmClassRoom);
 
 module.exports = router

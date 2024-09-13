@@ -11,11 +11,13 @@ class ClassRoomPageController extends GetxController {
 
   Map classRoom = {};
   List students = [];
+  RxList studentsThatAppear = [].obs;
 
   @override
   void onInit() {
     super.onInit();
     getClassRooms();
+    print(data['classRoomID']);
   }
 
   @override
@@ -30,11 +32,12 @@ class ClassRoomPageController extends GetxController {
 
   void getClassRooms() async {
     final response = await http.get(
-        Uri.parse('http://10.0.2.2:5000/admin/snsct/${data['classRoomID']}'));
+        Uri.parse('http://localhost:5000/admin/snsct/${data['classRoomID']}'));
 
     if (response.statusCode == 200) {
       classRoom = jsonDecode(response.body)['classRoom'];
       students = jsonDecode(response.body)['students'];
+      studentsThatAppear.value = students;
       print(students);
       ready.value = true;
     } else {
@@ -44,8 +47,10 @@ class ClassRoomPageController extends GetxController {
 
   void updateClass() async {
     try {
-      final response = await http.get(Uri.parse(
-          'http://10.0.2.2:5000/admin/snsct/${data['classRoomID']}/confirm'));
+      final response = await http.post(Uri.parse(
+          'http://localhost:5000/admin/snsct/${data['classRoomID']}/confirm'), headers: {'Content-Type': 'application/json'}, body: jsonEncode({
+            'students': studentsThatAppear.value
+          }));
 
       if (response.statusCode == 200) {
         print(students);
