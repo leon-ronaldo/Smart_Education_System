@@ -26,7 +26,7 @@ const classRoomSchema = mongoose.Schema(
         type: Array
       },
       encodings: {
-        type: Array
+        type: String
       },
       smartBoardID: {
         type: String,

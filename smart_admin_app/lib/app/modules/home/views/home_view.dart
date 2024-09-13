@@ -243,9 +243,7 @@ class HomePageClassRoomsSection extends GetWidget<HomeController> {
                   ),
                 ),
                 InkResponse(
-                  onTap: () {
-                    Get.toNamed('/add-classroom-page');
-                  },
+                  onTap: () => Get.toNamed('/add-classroom-page'),
                   child: Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(

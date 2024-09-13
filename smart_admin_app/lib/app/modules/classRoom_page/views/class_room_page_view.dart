@@ -20,8 +20,11 @@ class ClassRoomPageView extends GetView<ClassRoomPageController> {
         child: SingleChildScrollView(
           child: Obx(
             () => Visibility(
-              visible: controller.success.value,
-              replacement: Center(child: Text('Success bro')),
+              visible: !controller.success.value,
+              replacement: Container(
+                  height: screenSize.height,
+                  alignment: Alignment.center,
+                  child: const Text('Success bro')),
               child: Visibility(
                 replacement: SizedBox(
                     height: screenSize.height,
@@ -153,7 +156,7 @@ class ClassRoomPageStudentsSection extends GetWidget<ClassRoomPageController> {
           ),
           InkResponse(
             onTap: () {
-              
+              controller.updateClass();
             },
             child: Container(
               width: screenSize.width,

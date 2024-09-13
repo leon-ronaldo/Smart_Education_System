@@ -10,7 +10,6 @@ const {
     getClassRooms,
     getClassRoom,
     addAttendance,
-    runAttendanceScript
 } = require('../controllers/classRoomController');
 
 const ensureAuthenticated=require("../middleware/authMiddleware");

@@ -39,30 +39,47 @@ def _display_face(draw, bounding_box, name):
         size = 32,
         fill="white",
     )
+    
+def get_all_registered_names(encodings_location) -> dict:
+  try:
+    with open(encodings_location, "rb") as f:
+      loaded_encodings = pickle.load(f)
+    
+    # Create a dictionary with all names initialized as absent
+    names_dict = {name: 'absent' for name in loaded_encodings["names"]}
+    
+    return names_dict
+  except Exception as e:
+    print(f"Error getting names: {e}")
+    return f"Error getting names: {e}"
 
 def encode_known_faces(
     encodings_location: Path,
     model: str = "hog"
 ) -> None:
-    names = []
-    encodings = []
+    try:
+        names = []
+        encodings = []
 
-    for filepath in Path("training").glob("*/*"):
-        name = filepath.parent.name
-        image = face_recognition.load_image_file(filepath)
+        for filepath in Path(f"training/{encodings_location}").glob("*/*"):
+            name = filepath.parent.name
+            image = face_recognition.load_image_file(filepath)
 
-        face_locations = face_recognition.face_locations(image, model=model)
-        face_encodings = face_recognition.face_encodings(image, face_locations)
+            face_locations = face_recognition.face_locations(image, model=model)
+            face_encodings = face_recognition.face_encodings(image, face_locations)
 
-        for encoding in face_encodings:
-            names.append(name)
-            encodings.append(encoding)
+            for encoding in face_encodings:
+                names.append(name)
+                encodings.append(encoding)
 
-    name_encodings = {"names": names, "encodings": encodings}
-    with encodings_location.open(mode="wb") as f:
-        pickle.dump(name_encodings, f)
-        
-    return {'message': 'success'}
+        name_encodings = {"names": names, "encodings": encodings}
+        with open(f'{encodings_location}/encodings.pkl', mode="wb") as f:
+            pickle.dump(name_encodings, f)
+            
+        return {'message': 'success'}
+    
+    except Exception as error:
+        return f'{error}'
 
 def _recognize_face(unknown_encoding, loaded_encodings):
     boolean_matches = face_recognition.compare_faces(
@@ -82,37 +99,38 @@ def recognize_faces(
     encodings_location: Path,
     model: str = "hog",
 ) -> None:
-    attendance = ["chris_evans", "chris_hemsworth", "jeremy_renner", "mark_rufallow", "robert_downey_jr", "tom_hiddleston"]
     
-    currentAttendance = {x: 'absent' for x in attendance}
-
-    with open(encodings_location, "rb") as f:
-        loaded_encodings = pickle.load(f)
-
-    input_image = face_recognition.load_image_file(image_location)
-
-    input_face_locations = face_recognition.face_locations(
-        input_image, model=model
-    )
-    input_face_encodings = face_recognition.face_encodings(
-        input_image, input_face_locations
-    )
+    currentAttendance = get_all_registered_names(encodings_location=DEFAULT_ENCODINGS_PATH)
     
-    counter = 0
-    
-    pillow_image = Image.fromarray(input_image)
-    draw = ImageDraw.Draw(pillow_image)
+    try:
 
-    for bounding_box, unknown_encoding in zip(
-        input_face_locations, input_face_encodings
-    ):
-        name = _recognize_face(unknown_encoding, loaded_encodings)
-        if not name:
-            name = "Unknown"
-        # print(name, bounding_box)
-        currentAttendance[name] = 'present'
-        # _display_face(draw, bounding_box, name)
-        counter += 1
+        with open(encodings_location, "rb") as f:
+            loaded_encodings = pickle.load(f)
+
+        input_image = face_recognition.load_image_file(image_location)
+
+        input_face_locations = face_recognition.face_locations(
+            input_image, model=model
+        )
+        input_face_encodings = face_recognition.face_encodings(
+            input_image, input_face_locations
+        )
+        
+        pillow_image = Image.fromarray(input_image)
+        draw = ImageDraw.Draw(pillow_image)
+
+        for bounding_box, unknown_encoding in zip(
+            input_face_locations, input_face_encodings
+        ):
+            name = _recognize_face(unknown_encoding, loaded_encodings)
+            if not name:
+                name = "Unknown"
+            # print(name, bounding_box)
+            currentAttendance[name] = 'present'
+            # _display_face(draw, bounding_box, name)
+    
+    except Exception as error:
+        return f'{error}'
     
     # print(f"{counter} faces")
     # print(currentAttendance)
@@ -126,7 +144,7 @@ if __name__ == "__main__":
         if (sys.argv[1] == "recognize"):
             image_data_base64 = sys.argv[2]
             encodings_location = sys.argv[3]
-            result = recognize_faces(image_location=image_data_base64, encodings_location=os.path.join(os.getcwd(), f'face_recognition_system/test/{encodings_location}'))
+            result = recognize_faces(image_location=os.path.join(os.getcwd(), f'face_recognition_system/test/{image_data_base64}'), encodings_location=os.path.join(os.getcwd(), rf'face_recognition_system\test\{encodings_location}'))
             print(json.dumps(result))
             
         elif (sys.argv[1] == "setup"):

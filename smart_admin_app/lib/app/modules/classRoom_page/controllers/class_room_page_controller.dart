@@ -30,7 +30,7 @@ class ClassRoomPageController extends GetxController {
 
   void getClassRooms() async {
     final response = await http.get(
-        Uri.parse('http://localhost:5000/admin/SNSCT/${data['classRoomID']}'));
+        Uri.parse('http://10.0.2.2:5000/admin/snsct/${data['classRoomID']}'));
 
     if (response.statusCode == 200) {
       classRoom = jsonDecode(response.body)['classRoom'];
@@ -43,14 +43,18 @@ class ClassRoomPageController extends GetxController {
   }
 
   void updateClass() async {
-    final response = await http.get(
-        Uri.parse('http://localhost:5000/admin/SNSCT/${data['classRoomID']}/confirm'));
+    try {
+      final response = await http.get(Uri.parse(
+          'http://10.0.2.2:5000/admin/snsct/${data['classRoomID']}/confirm'));
 
-    if (response.statusCode == 200) {
-      print(students);
-      success.value = true;
-    } else {
-      print(response.body);
+      if (response.statusCode == 200) {
+        print(students);
+        success.value = true;
+      } else {
+        print(response.body);
+      }
+    } on Exception catch (e) {
+      // TODO
     }
   }
 }

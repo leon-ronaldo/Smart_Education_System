@@ -8,6 +8,8 @@ class AddClassroomPageController extends GetxController {
   final profileUrl =
       'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Harvard_University_coat_of_arms.svg/640px-Harvard_University_coat_of_arms.svg.png';
   final instituionAcronym = 'snsct';
+      'https://snscourseware.org/images/SNS%20Institutionsapp.png';
+  final instituionAcronym = 'snsct';
 
   final gradeController = TextEditingController().obs;
   final classController = TextEditingController().obs;

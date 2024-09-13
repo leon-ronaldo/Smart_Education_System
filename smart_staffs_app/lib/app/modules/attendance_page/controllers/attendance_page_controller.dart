@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 class AttendancePageController extends GetxController {
-  final classID = 'harvIIIcseb';
+  final classID = 'snsctIIIcseb';
 
   RxBool ready = false.obs;
   RxBool error = false.obs;
@@ -65,12 +65,16 @@ class AttendancePageController extends GetxController {
   }
 
   Future<void> uploadImage() async {
-    final request = http.MultipartRequest('POST',
-        Uri.parse('http://localhost:5000/classRoom/$classID/addAttendance'));
+    try {
+      final request = http.MultipartRequest('POST',
+          Uri.parse('http://localhost:5000/classRoom/$classID/addAttendance'));
 
-    request.files.add(await http.MultipartFile.fromPath(
-        'picture', capturedImagePath.value));
+      request.files.add(await http.MultipartFile.fromPath(
+          'picture', capturedImagePath.value));
 
-    final response = await request.send();
+      final response = await request.send();
+    } catch (error) {
+      print(error);
+    }
   }
 }

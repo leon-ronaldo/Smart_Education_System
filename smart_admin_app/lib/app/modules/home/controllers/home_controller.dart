@@ -11,12 +11,12 @@ class HomeController extends GetxController {
     'institutionName': 'SNS College of Technology',
     'notifications': [
       {
-        'type': 'Fire Alarm Trigger',
+        'type': 'Smart Board Session',
         'triggeredOn': DateTime.now().toIso8601String(),
         'classRoom': 'III CSE B'
       },
       {
-        "type": "Fire Alarm Trigger",
+        "type": "Noise Control Alert",
         "triggeredOn": "2024-08-25T15:00:00Z",
         "classRoom": "II ECE A"
       },
