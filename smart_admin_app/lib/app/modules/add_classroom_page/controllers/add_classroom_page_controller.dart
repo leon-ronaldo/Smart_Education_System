@@ -63,7 +63,7 @@ class AddClassroomPageController extends GetxController {
     }
 
     final response =
-        await http.post(Uri.parse('http://localhost:5000/classRoom/'),
+        await http.post(Uri.parse('https://smart-education-system.onrender.com/classRoom/'),
             headers: {'Content-Type': 'application/json'},
             body: jsonEncode({
               'classRoomID': classIDController.value.text,

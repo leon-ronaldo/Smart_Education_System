@@ -54,8 +54,6 @@ const confirmClassRoom = asyncHandler(async (req, res) => {
         return;
     }
 
-    console.log(students);
-
     //image creation of each student
 
     students.forEach(async student => {
