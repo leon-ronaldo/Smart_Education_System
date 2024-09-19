@@ -104,7 +104,7 @@ async function runAttendanceScript(fileBuffer, classroom) {
             }
         });
 
-        fs.writeFileSync(encodingsFilePath, classroom.encodings.split(';base64,').pop(), { encoding: 'base64' }, (err) => {
+        fs.writeFileSync(encodingsFilePath, classroom.encodings, { encoding: 'base64' }, (err) => {
             if (err) {
                 console.log('errr bro');
                 return reject(err);
@@ -138,11 +138,11 @@ async function runAttendanceScript(fileBuffer, classroom) {
                 }
             });
 
-            await fs.rm(encodingsFilePath, { recursive: true, force: true }, (err) => {
-                if (err) {
-                    console.log(err);
-                }
-            });
+            // await fs.rm(encodingsFilePath, { recursive: true, force: true }, (err) => {
+            //     if (err) {
+            //         console.log(err);
+            //     }
+            // });
 
             if (code === 0) {
                 try {

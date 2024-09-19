@@ -32,7 +32,7 @@ class ClassRoomPageController extends GetxController {
 
   void getClassRooms() async {
     final response = await http.get(
-        Uri.parse('https://smart-education-system.onrender.com/admin/snsct/${data['classRoomID']}'));
+        Uri.parse('http://localhost:5000/admin/snsct/${data['classRoomID']}'));
 
     if (response.statusCode == 200) {
       classRoom = jsonDecode(response.body)['classRoom'];
@@ -48,7 +48,7 @@ class ClassRoomPageController extends GetxController {
   void updateClass() async {
     try {
       final response = await http.post(Uri.parse(
-          'https://smart-education-system.onrender.com/admin/snsct/${data['classRoomID']}/confirm'), headers: {'Content-Type': 'application/json'}, body: jsonEncode({
+          'http://localhost:5000/admin/snsct/${data['classRoomID']}/confirm'), headers: {'Content-Type': 'application/json'}, body: jsonEncode({
             'students': studentsThatAppear.value
           }));
 

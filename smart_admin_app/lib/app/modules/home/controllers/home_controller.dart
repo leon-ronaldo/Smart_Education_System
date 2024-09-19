@@ -47,7 +47,7 @@ class HomeController extends GetxController {
 
   void getClassRooms() async {
     final response =
-        await http.get(Uri.parse('https://smart-education-system.onrender.com/admin/snsct/'));
+        await http.get(Uri.parse('http://localhost:5000/admin/snsct/'));
 
     if (response.statusCode == 200) {
       data.value['classRooms'] = jsonDecode(response.body);

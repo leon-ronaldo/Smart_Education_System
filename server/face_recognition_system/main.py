@@ -6,7 +6,6 @@ from pathlib import Path
 from collections import Counter
 import sys
 from PIL import Image, ImageDraw
-import cv2
 import face_recognition
 import pickle
 
@@ -61,7 +60,7 @@ def encode_known_faces(
         names = []
         encodings = []
 
-        for filepath in Path(f"training/{encodings_location}").glob("*/*"):
+        for filepath in Path(f"{encodings_location}").glob("*/*"):
             name = filepath.parent.name
             image = face_recognition.load_image_file(filepath)
 
@@ -79,7 +78,7 @@ def encode_known_faces(
         return {'message': 'success'}
     
     except Exception as error:
-        return f'{error}'
+        return f'"error bro" : {error}'
 
 def _recognize_face(unknown_encoding, loaded_encodings):
     boolean_matches = face_recognition.compare_faces(
@@ -100,7 +99,7 @@ def recognize_faces(
     model: str = "hog",
 ) -> None:
     
-    currentAttendance = get_all_registered_names(encodings_location=DEFAULT_ENCODINGS_PATH)
+    currentAttendance = get_all_registered_names(encodings_location=encodings_location)
     
     try:
 
@@ -129,10 +128,10 @@ def recognize_faces(
             currentAttendance[name] = 'present'
             # _display_face(draw, bounding_box, name)
         
-        return currentAttendance
+        return f'{currentAttendance}'
     
     except Exception as error:
-        return f'{error}'
+        return {"message" : f'"recog error" {error}'}
     
     # print(f"{counter} faces")
     # print(currentAttendance)

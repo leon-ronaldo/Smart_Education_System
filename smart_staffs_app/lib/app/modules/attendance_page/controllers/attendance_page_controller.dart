@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 class AttendancePageController extends GetxController {
-  final classID = 'snsctIIIcseb';
+  final classID = 'snsctIIIavengers';
 
   RxBool ready = false.obs;
   RxBool error = false.obs;
@@ -14,6 +14,7 @@ class AttendancePageController extends GetxController {
   RxBool cameraOpened = false.obs;
   RxBool previewImage = false.obs;
   late RxString capturedImagePath = ''.obs;
+  RxMap attendance = {}.obs;
 
   late CameraController cameraController;
 
@@ -73,6 +74,10 @@ class AttendancePageController extends GetxController {
           'picture', capturedImagePath.value));
 
       final response = await request.send();
+
+      if(response.statusCode == 200) {
+
+      }
     } catch (error) {
       print(error);
     }

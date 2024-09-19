@@ -68,7 +68,7 @@ class RegisterPageController extends GetxController {
 
   Future<void> getClassRooms() async {
     final response =
-        await http.get(Uri.parse('https://smart-education-system.onrender.com/classRoom/'));
+        await http.get(Uri.parse('http://localhost:5000/classRoom/'));
     classRooms.value = jsonDecode(response.body);
     classRoomsThatAppear.value = classRooms.value;
     print(classRooms);
@@ -119,7 +119,7 @@ class RegisterPageController extends GetxController {
     try {
 loading.value = true;
   final request = http.MultipartRequest(
-      'POST', Uri.parse('https://smart-education-system.onrender.com/students/'));
+      'POST', Uri.parse('http://localhost:5000/students/'));
   
   request.files
       .add(await http.MultipartFile.fromPath('file', firstfilePath.value));

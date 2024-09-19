@@ -47,6 +47,8 @@ const createStudent = asyncHandler(async (req, res) => {
         res.status(400).json({ 'error': error });
         res.end();
     }
+
+    
 });
 
 module.exports = {createStudent};
